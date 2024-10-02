@@ -8,7 +8,7 @@ import os
 import unittest
 import threading
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'src', 'pytracetoix'))
 
 from pytracetoix import d__, c__  # noqa
 

@@ -1,0 +1,20 @@
+[project]
+name = "pytracetoix"
+version = "0.1.5"
+authors = [
+  { name="Alexandre Bento Freire", email="devtoix@a-bentofreire.com" },
+]
+description = "A result(input, ...) value tracer for debugging purposes"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://www.devtoix.com/en/projects/pytracetoix"
+Documentation = "https://www.devtoix.com/docs/pytracetoix/en/"
+Repository = "https://github.com/a-bentofreire/pytracetoix"
+Issues = "https://github.com/a-bentofreire/pytracetoix/issues"

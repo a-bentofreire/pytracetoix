@@ -123,6 +123,7 @@ Chain([10, 20, 30, 40, 50]).map(lambda x: c__(x * 2)).filter(lambda x: c__(x > 7
 
 # Display the result and capture the map and filter inputs
 d__(Chain([10, 20, 30, 40, 50]).map(lambda x: c__(x * 2)).filter(lambda x: c__(x > 70)).data)
+
 # Output:
 # i0:`20` | i1:`40` | i2:`60` | i3:`80` | i4:`100` | i5:`False` | i6:`False` | i7:`False` | i8:`True` | i9:`True` | _:`[80, 100]`
 

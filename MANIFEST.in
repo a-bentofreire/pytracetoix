@@ -1,4 +1,5 @@
 exclude tests/*.py
 include README.md
-include pytracetoix.py
-include __init__.py
+include LICENSE
+include src/pytracetoix/pytracetoix.py
+include src/pytracetoix/__init__.py
