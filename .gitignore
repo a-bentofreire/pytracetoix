@@ -1,0 +1,9 @@
+__pycache__/
+.private/
+.tox/
+.vscode/
+build/
+dist/
+pytracetoix.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt

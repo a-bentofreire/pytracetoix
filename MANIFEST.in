@@ -1,0 +1,4 @@
+exclude tests/*.py
+include README.md
+include pytracetoix.py
+include __init__.py
