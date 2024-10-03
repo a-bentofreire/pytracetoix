@@ -1,6 +1,6 @@
 # Description
 
-[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is a Python result(input, ...) value tracer for debugging purposes.
+[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is a expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions.
 
 Code editors can't set breakpoints inside expressions, lambda functions, list comprehensions and chained methods, forcing major code changes to debug this code.
 
@@ -9,22 +9,26 @@ PyTraceToIX offers a simple solution to this problem.
 It was built to be simple with awkward functions to be easy to spot it and remove it once the bug is found.
 
 PyTraceToIX has 2 major functions:
-- `c__` capture the input of a function or expression input. ex: `c__(x)`
-- `d__` display the result of a function or expression and all the captured inputs. ex: `d__(c__(x) + c__(y))`
+- `c__` capture the input of an expression input. ex: `c__(x)`
+- `d__` display the result of an expression and all the captured inputs. ex: `d__(c__(x) + c__(y))`
 
-If you find this project useful, please, read the [Support this Project](#support-this-project) on how to contribute.
+And 2 optional functions:
+- `init__` initializes display format, output stream and multithreading.
+- `t__` defines a name for the current thread.
+
+If you find this project useful, please, read the [Support this Project](https://www.devtoix.com/en/projects/pytracetoix#support-this-project) on how to contribute.
 
 ## Features
 
-- [Multithreading](#multithreading) support.
+- [Multithreading](https://www.devtoix.com/en/projects/pytracetoix#multithreading) support.
 - Simple and short minimalist function names.
 - Result with Inputs tracing.
-- Configurable [formatting](#formatting) at global level and at function level.
+- Configurable [formatting](https://www.devtoix.com/en/projects/pytracetoix#formatting) at global level and at function level.
 - Configurable result and input naming.
 - Output to the stdout or a stream.
 - Multiple levels.
-- Capture Input method with `allow` callback.
-- Display Result method with `allow`, `before`, `after` callbacks.
+- Capture Input method with `allow` and `name` callback.
+- Display Result method with `allow`, `before` and `after` callbacks.
 
 ## Installation
 
@@ -182,7 +186,7 @@ for thread in threads:
 
 ## Metadata
 
- The `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` items:  
+ The `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` items:
 
 - `meta__`: list of meta keys including the name key.
 - `thread_id__`: thread_id being executed
@@ -191,6 +195,10 @@ for thread in threads:
 - `allow__`: If false it was allowed. Use this for `after` callback.
 - `output__`: Text passed to `before` without `new_line`.
 - name: name parameter
+
+## Documentation
+
+ [Package Documentation](https://www.devtoix.com/docs/pytracetoix/en/)\
 
 ## Support this Project
 

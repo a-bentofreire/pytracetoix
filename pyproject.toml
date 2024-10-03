@@ -1,10 +1,10 @@
 [project]
 name = "pytracetoix"
-version = "0.1.5"
+version = "0.1.7"
 authors = [
   { name="Alexandre Bento Freire", email="devtoix@a-bentofreire.com" },
 ]
-description = "A result(input, ...) value tracer for debugging purposes"
+description = "An expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -12,6 +12,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+keywords = ["debugging", "tracer", "debug", "log", "logger", "expression"]
 
 [project.urls]
 Homepage = "https://www.devtoix.com/en/projects/pytracetoix"
