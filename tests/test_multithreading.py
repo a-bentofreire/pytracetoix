@@ -31,9 +31,9 @@ class TestMultithreading:
         init__()
 
     def call_equal(self, data, call_count):
+        thread_name = threading.get_ident() if call_count != 2 else 'middle'
         assert data['output__'] == \
-            f'{threading.get_ident() if call_count != 2 else 'middle'}: i0:`{call_count}`' \
-            + f' | i1:`{call_count + 1}` | _:`{call_count * 2 + 1}`'
+            f'{thread_name}: i0:`{call_count}`' + f' | i1:`{call_count + 1}` | _:`{call_count * 2 + 1}`'
         return False
 
     def thread_function(self):
