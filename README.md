@@ -1,12 +1,12 @@
 # Description
 
-[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is a expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions.
+[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions.
 
-Code editors can't set breakpoints inside expressions, lambda functions, list comprehensions and chained methods, forcing major code changes to debug this code.
+Code editors can't set breakpoints inside expressions, lambda functions, list comprehensions, and chained methods, forcing significant code changes to debug such code.
 
-PyTraceToIX offers a simple solution to this problem.
+PyTraceToIX provides a straightforward solution to this problem.
 
-It was built to be simple with awkward functions to be easy to spot it and remove it once the bug is found.
+It was designed to be simple, with easily identifiable functions that can be removed once the bug is found.
 
 PyTraceToIX has 2 major functions:
 - `c__` capture the input of an expression input. ex: `c__(x)`
