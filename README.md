@@ -39,7 +39,6 @@ pip install pytracetoix
 ## Usage
 
 ```python
-#!/usr/bin/env python3
 from pytracetoix import d__, c__
 
 [x, y, w, k, u] = [1, 2, 3, 4 + 4, lambda x:x]
@@ -123,7 +122,7 @@ class Chain:
 
 
 # A class with chain methods
-Chain([10, 20, 30, 40, 50]).map(lambda x: c__(x * 2)).filter(lambda x: c__(x > 70))
+Chain([10, 20, 30, 40, 50]).map(lambda x: x * 2).filter(lambda x: x > 70)
 
 # Display the result and capture the map and filter inputs
 d__(Chain([10, 20, 30, 40, 50]).map(lambda x: c__(x * 2)).filter(lambda x: c__(x > 70)).data)

@@ -5,17 +5,20 @@
 
 import sys
 import os
-import unittest
+import pytest
 import threading
 import time
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'src', 'pytracetoix'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), 'src', 'pytracetoix'))
 
 from pytracetoix import d__, c__, t__, init__  # noqa
 
 
-class TestMultithreading(unittest.TestCase):
-    def setUp(self):
+class TestMultithreading:
+
+    @pytest.fixture(autouse=True)
+    def setup_and_teardown(self):
         init__(multithreading=True)
         self._lock = threading.Lock()
         self.threads = []
@@ -24,10 +27,13 @@ class TestMultithreading(unittest.TestCase):
             thread = threading.Thread(target=self.thread_function)
             self.threads.append(thread)
 
+        yield
+        init__()
+
     def call_equal(self, data, call_count):
-        self.assertEqual(data['output__'],
-                         f'{threading.get_ident() if call_count != 2 else 'middle'}: i0:`{call_count}`'
-                         + f' | i1:`{call_count + 1}` | _:`{call_count * 2 + 1}`')
+        assert data['output__'] == \
+            f'{threading.get_ident() if call_count != 2 else 'middle'}: i0:`{call_count}`' \
+            + f' | i1:`{call_count + 1}` | _:`{call_count * 2 + 1}`'
         return False
 
     def thread_function(self):
@@ -48,9 +54,6 @@ class TestMultithreading(unittest.TestCase):
         for thread in self.threads:
             thread.join()
 
-    def tearDown(self):
-        init__()
-
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()

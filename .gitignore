@@ -2,6 +2,7 @@ __pycache__/
 .private/
 .tox/
 .vscode/
+.coverage
 build/
 dist/
 pytracetoix.egg-info/

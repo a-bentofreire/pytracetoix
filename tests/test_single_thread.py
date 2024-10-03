@@ -5,18 +5,19 @@
 
 import sys
 import os
-import unittest
+import pytest
 import threading
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'src', 'pytracetoix'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), 'src', 'pytracetoix'))
 
 from pytracetoix import d__, c__  # noqa
 
 
-class TestSingleThread(unittest.TestCase):
+class TestSingleThread:
 
     def call_equal(self, data, expected):
-        self.assertEqual(data['output__'], expected)
+        assert data['output__'] == expected
         return False
 
     def test_lambda_no_inputs(self):
@@ -77,7 +78,7 @@ class TestSingleThread(unittest.TestCase):
         d__([c__(i, allow=lambda index, _, __: index > 1 and index < 4) for i in range(5)],
             allow=lambda data: data['allow_input_count__'] == 2,
             before=lambda data: self.call_equal(data, "i0:`2` | i1:`3` | _:`[0, 1, 2, 3, 4]`"))
-        
+
         d__([c__(i, allow=lambda index, _, __: index > 1 and index < 4) for i in range(5)],
             allow=lambda data: data['allow_input_count__'] != 2,
             after=lambda data: data.get("output__") is None)
@@ -131,4 +132,4 @@ class TestSingleThread(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()
