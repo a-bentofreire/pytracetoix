@@ -198,7 +198,7 @@ for thread in threads:
 
 ## Documentation
 
- [Package Documentation](https://www.devtoix.com/docs/pytracetoix/en/)\
+ [Package Documentation](https://www.devtoix.com/docs/pytracetoix/en/)
 
 ## Support this Project
 
