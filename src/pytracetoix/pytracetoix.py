@@ -10,7 +10,7 @@ from typing import Union, Callable, Dict, Any
 Format = Dict[str, Union[str, bool]]
 
 """
-Format Type -- Defines how result and input values will be formatted. 
+Format Type -- Defines how result and input values will be formatted.
 
 Parameters:
     result: The result value format will be displayed. Defaults to '{name}:`{value}`'.
@@ -37,9 +37,15 @@ def init__(stream: Any = None, multithreading: bool = False, format: Format = DE
     Initializes global settings of the tracing tool.
 
     Args:
-        stream (stream, optional): The output stream to write the output lines. Defaults to sys.stdout.
-        multithreading (bool, optional): If True, it prefixes the output with `thread_id:`. Defaults to False.
-        format (Format, optional): Format dictionary. Defaults to DEFAULT_FORMAT.
+        stream (stream, optional):
+          The output stream to write the output lines.
+          Defaults to sys.stdout.
+        multithreading (bool, optional):
+          If True, it prefixes the output with `thread_id:`.
+          Defaults to False.
+        format (Format, optional):
+          Format dictionary.
+          Defaults to DEFAULT_FORMAT.
     """
     global _stream, _multithreading, _format, _inputs_per_threads, _thread_names
     with _lock:
@@ -52,12 +58,19 @@ def init__(stream: Any = None, multithreading: bool = False, format: Format = DE
 
 def t__(name: str = None, thread_id: int = None):
     """
-    Thread Name: Assigns a name to a thread. If no name is provided, generates a name based on the number of threads.
+    Assigns a name to a thread.
+
+    If no **name** is provided, it generates a name based on the number of threads.
+
     If no thread_id is provided, uses the current thread ID.
 
     Args:
-        name (str, optional): The name for the thread. Defaults to 't%d' where %d is the number of threads.
-        thread_id (int, optional): The ID of the thread. Defaults to the current thread ID.
+        name (str, optional):
+          The name for the thread.
+          Defaults to 't%d' where %d is the number of threads.
+        thread_id (int, optional):
+          The ID of the thread.
+          Defaults to the current thread ID.
     """
     global _thread_names
     with _lock:
@@ -70,13 +83,20 @@ def c__(value: Any,
         level: int = 0):
     """
     Captures the input value for the current thread.
+
     If no name is provided, it generates a default name.
 
     Args:
         value (Any): The input value to store.
-        name (Union[str, Callable[[int, int, Any], str]], optional): The name of the input. Defaults to 'i%d' where %d is the number of inputs for the thread.
-        allow (Callable[[int, str, Any], str]], optional): A function or value to allow tracing the input. `allow` is called before `name`.
-        level (int, optional): The level number to be used when there is more than one d__ within the same expression or function. Defaults to 0.
+        name (Union[str, Callable[[int, int, Any], str]], optional):
+          The name of the input.
+          Defaults to 'i%d' where %d is the number of inputs for the thread.
+        allow (Callable[[int, str, Any], str]], optional):
+          A function or value to allow tracing the input. **allow** is called before **name**.
+        level (int, optional):
+          The level number to be used when there is more than one **d__** within the same
+          expression or function.
+          Defaults to 0.
 
     Returns:
         value
@@ -124,26 +144,38 @@ def d__(value: Any,
         format: Format = None):
     """
     Displays formatted result and inputs for the current thread using a given format.
-    Optionally calls allow, before and after functions with the data.
 
-    `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` values:  
+    Optionally calls **allow**, **before** and **after** functions with the data.
 
-    - `meta__`: list of meta keys including the name key.
-    - `thread_id__`: thread_id being executed
-    - `allow_input_count__`: total number of inputs that are allowed.
-    - `input_count__`: total number of inputs being captured.
-    - `allow__`: If false it was allowed. Use this for `after` callback.
-    - `output__`: Text passed to `before` without `new_line`.
-    - name: name parameter
+    **allow**, **before** and **after** will receive a parameter **data** with the allowed inputs.
+     With the following **meta** values:
+
+    - **meta__**: List of meta keys including the name key.
+    - **thread_id__**: Id of the thread being executed.
+    - **allow_input_count__**: Total number of inputs that are allowed.
+    - **input_count__**: Total number of inputs being captured.
+    - **allow__**: If **false** it was allowed. Use this for **after** callback.
+    - **output__**: Text passed to **before** without **new_line**.
+    - **name**: **value** parameter.
 
     Args:
         value (Any): The result to trace.
-        name (str, optional): The name of the function being traced. Defaults to '_').
-        allow (Callable[[Dict[str, Any]], bool], optional): A function to call to allow tracing. If it returns False, tracing is skipped but after is still called.
-        before (Callable[[Dict[str, Any]], bool], optional): A function to call before displaying the output. If it returns False, tracing is skipped.
-        after (Callable[[Dict[str, Any]], None], optional): A function to call after displaying the output. After is always called even if not allow.
-        inputs (Dict[str, Any], optional): Dictionary of additional inputs.
-        format (Format, optional): Alternative output format.
+        name (str, optional):
+          The name of the function being traced.
+          Defaults to '_'.
+        allow (Callable[[Dict[str, Any]], bool], optional):
+          A function to call to allow tracing.
+          If it returns False, tracing is skipped but after is still called.
+        before (Callable[[Dict[str, Any]], bool], optional):
+          A function to call before displaying the output.
+          If it returns False, tracing is skipped.
+        after (Callable[[Dict[str, Any]], None], optional):
+          A function to call after displaying the output.
+          After is always called even if not allow.
+        inputs (Dict[str, Any], optional):
+          Dictionary of additional inputs.
+        format (Format, optional):
+          Alternative output format.
 
     Returns:
         value
@@ -156,12 +188,12 @@ def d__(value: Any,
 
         >>> d__(c__(x) + c__(y), allow=lambda data: data['input_count__'] == 2)
         >>> d__(c__(x) + c__(y), allow=lambda data: data['i0'] == 10.0)
-        >>> d__(c__(x, allow=lambda index, name, value: value > 10) + c__(y), 
+        >>> d__(c__(x, allow=lambda index, name, value: value > 10) + c__(y),
                 allow=lambda data: data['allow_input_count__'] == 2)
 
         >>> d__([c__(x) for x in ['10', '20']], before=lambda data: '10' in data['output__'])
 
-        >>> d__([c__(x) for x in ['10', '20']], allow=lambda data: data['allow_input_count__'] == 2,
+        >>> d__([c__(x) for x in ['1', '2']], allow=lambda data: data['allow_input_count__'] == 2,
                 after=lambda data: call_after(data) if data['allow__'] else "")
 
 """
@@ -191,7 +223,8 @@ def d__(value: Any,
             if format.get('input'):
                 for key, val in data.items():
                     if key not in data['meta__']:
-                        output += replace_macro(format['input'], key, val) + (format.get('sep') or '')
+                        output += replace_macro(format['input'], key, val) + \
+                            (format.get('sep') or '')
 
             if format.get('result'):
                 output += replace_macro(format['result'], name, value)

@@ -83,7 +83,7 @@
 <span class="n">Format</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Format Type -- Defines how result and input values will be formatted. </span>
+<span class="sd">Format Type -- Defines how result and input values will be formatted.</span>
 
 <span class="sd">Parameters:</span>
 <span class="sd">    result: The result value format will be displayed. Defaults to &#39;{name}:`{value}`&#39;.</span>
@@ -112,9 +112,15 @@
 <span class="sd">    Initializes global settings of the tracing tool.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        stream (stream, optional): The output stream to write the output lines. Defaults to sys.stdout.</span>
-<span class="sd">        multithreading (bool, optional): If True, it prefixes the output with `thread_id:`. Defaults to False.</span>
-<span class="sd">        format (Format, optional): Format dictionary. Defaults to DEFAULT_FORMAT.</span>
+<span class="sd">        stream (stream, optional):</span>
+<span class="sd">          The output stream to write the output lines.</span>
+<span class="sd">          Defaults to sys.stdout.</span>
+<span class="sd">        multithreading (bool, optional):</span>
+<span class="sd">          If True, it prefixes the output with `thread_id:`.</span>
+<span class="sd">          Defaults to False.</span>
+<span class="sd">        format (Format, optional):</span>
+<span class="sd">          Format dictionary.</span>
+<span class="sd">          Defaults to DEFAULT_FORMAT.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_stream</span><span class="p">,</span> <span class="n">_multithreading</span><span class="p">,</span> <span class="n">_format</span><span class="p">,</span> <span class="n">_inputs_per_threads</span><span class="p">,</span> <span class="n">_thread_names</span>
     <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
@@ -130,12 +136,19 @@
 <a class="viewcode-back" href="../pytracetoix.html#pytracetoix.t__">[docs]</a>
 <span class="k">def</span> <span class="nf">t__</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">thread_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Thread Name: Assigns a name to a thread. If no name is provided, generates a name based on the number of threads.</span>
+<span class="sd">    Assigns a name to a thread.</span>
+<span class="sd">    </span>
+<span class="sd">    If no **name** is provided, it generates a name based on the number of threads.</span>
+<span class="sd">    </span>
 <span class="sd">    If no thread_id is provided, uses the current thread ID.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        name (str, optional): The name for the thread. Defaults to &#39;t%d&#39; where %d is the number of threads.</span>
-<span class="sd">        thread_id (int, optional): The ID of the thread. Defaults to the current thread ID.</span>
+<span class="sd">        name (str, optional): </span>
+<span class="sd">          The name for the thread.</span>
+<span class="sd">          Defaults to &#39;t%d&#39; where %d is the number of threads.</span>
+<span class="sd">        thread_id (int, optional): </span>
+<span class="sd">          The ID of the thread.</span>
+<span class="sd">          Defaults to the current thread ID.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_thread_names</span>
     <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
@@ -151,13 +164,20 @@
         <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Captures the input value for the current thread.</span>
+<span class="sd">    </span>
 <span class="sd">    If no name is provided, it generates a default name.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        value (Any): The input value to store.</span>
-<span class="sd">        name (Union[str, Callable[[int, int, Any], str]], optional): The name of the input. Defaults to &#39;i%d&#39; where %d is the number of inputs for the thread.</span>
-<span class="sd">        allow (Callable[[int, str, Any], str]], optional): A function or value to allow tracing the input. `allow` is called before `name`.</span>
-<span class="sd">        level (int, optional): The level number to be used when there is more than one d__ within the same expression or function. Defaults to 0.</span>
+<span class="sd">        name (Union[str, Callable[[int, int, Any], str]], optional): </span>
+<span class="sd">          The name of the input.</span>
+<span class="sd">          Defaults to &#39;i%d&#39; where %d is the number of inputs for the thread.</span>
+<span class="sd">        allow (Callable[[int, str, Any], str]], optional): </span>
+<span class="sd">          A function or value to allow tracing the input. **allow** is called before **name**.</span>
+<span class="sd">        level (int, optional): </span>
+<span class="sd">          The level number to be used when there is more than one **d__** within the same </span>
+<span class="sd">          expression or function.          </span>
+<span class="sd">          Defaults to 0.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        value</span>
@@ -208,26 +228,38 @@
         <span class="nb">format</span><span class="p">:</span> <span class="n">Format</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Displays formatted result and inputs for the current thread using a given format.</span>
-<span class="sd">    Optionally calls allow, before and after functions with the data.</span>
+<span class="sd">    </span>
+<span class="sd">    Optionally calls **allow**, **before** and **after** functions with the data.</span>
 
-<span class="sd">    `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` values:  </span>
+<span class="sd">    **allow**, **before** and **after** will receive a parameter **data** with the allowed inputs.</span>
+<span class="sd">     With the following **meta** values:</span>
 
-<span class="sd">    - `meta__`: list of meta keys including the name key.</span>
-<span class="sd">    - `thread_id__`: thread_id being executed</span>
-<span class="sd">    - `allow_input_count__`: total number of inputs that are allowed.</span>
-<span class="sd">    - `input_count__`: total number of inputs being captured.</span>
-<span class="sd">    - `allow__`: If false it was allowed. Use this for `after` callback.</span>
-<span class="sd">    - `output__`: Text passed to `before` without `new_line`.</span>
-<span class="sd">    - name: name parameter</span>
+<span class="sd">    - **meta__**: List of meta keys including the name key.</span>
+<span class="sd">    - **thread_id__**: Id of the thread being executed.</span>
+<span class="sd">    - **allow_input_count__**: Total number of inputs that are allowed.</span>
+<span class="sd">    - **input_count__**: Total number of inputs being captured.</span>
+<span class="sd">    - **allow__**: If **false** it was allowed. Use this for **after** callback.</span>
+<span class="sd">    - **output__**: Text passed to **before** without **new_line**.</span>
+<span class="sd">    - **name**: **value** parameter.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        value (Any): The result to trace.</span>
-<span class="sd">        name (str, optional): The name of the function being traced. Defaults to &#39;_&#39;).</span>
-<span class="sd">        allow (Callable[[Dict[str, Any]], bool], optional): A function to call to allow tracing. If it returns False, tracing is skipped but after is still called.</span>
-<span class="sd">        before (Callable[[Dict[str, Any]], bool], optional): A function to call before displaying the output. If it returns False, tracing is skipped.</span>
-<span class="sd">        after (Callable[[Dict[str, Any]], None], optional): A function to call after displaying the output. After is always called even if not allow.</span>
-<span class="sd">        inputs (Dict[str, Any], optional): Dictionary of additional inputs.</span>
-<span class="sd">        format (Format, optional): Alternative output format.</span>
+<span class="sd">        name (str, optional): </span>
+<span class="sd">          The name of the function being traced.</span>
+<span class="sd">          Defaults to &#39;_&#39;.</span>
+<span class="sd">        allow (Callable[[Dict[str, Any]], bool], optional): </span>
+<span class="sd">          A function to call to allow tracing.</span>
+<span class="sd">          If it returns False, tracing is skipped but after is still called.</span>
+<span class="sd">        before (Callable[[Dict[str, Any]], bool], optional): </span>
+<span class="sd">          A function to call before displaying the output. </span>
+<span class="sd">          If it returns False, tracing is skipped.</span>
+<span class="sd">        after (Callable[[Dict[str, Any]], None], optional): </span>
+<span class="sd">          A function to call after displaying the output. </span>
+<span class="sd">          After is always called even if not allow.</span>
+<span class="sd">        inputs (Dict[str, Any], optional): </span>
+<span class="sd">          Dictionary of additional inputs.</span>
+<span class="sd">        format (Format, optional): </span>
+<span class="sd">          Alternative output format.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        value</span>
@@ -240,12 +272,12 @@
 
 <span class="sd">        &gt;&gt;&gt; d__(c__(x) + c__(y), allow=lambda data: data[&#39;input_count__&#39;] == 2)</span>
 <span class="sd">        &gt;&gt;&gt; d__(c__(x) + c__(y), allow=lambda data: data[&#39;i0&#39;] == 10.0)</span>
-<span class="sd">        &gt;&gt;&gt; d__(c__(x, allow=lambda index, name, value: value &gt; 10) + c__(y), </span>
+<span class="sd">        &gt;&gt;&gt; d__(c__(x, allow=lambda index, name, value: value &gt; 10) + c__(y),</span>
 <span class="sd">                allow=lambda data: data[&#39;allow_input_count__&#39;] == 2)</span>
 
 <span class="sd">        &gt;&gt;&gt; d__([c__(x) for x in [&#39;10&#39;, &#39;20&#39;]], before=lambda data: &#39;10&#39; in data[&#39;output__&#39;])</span>
 
-<span class="sd">        &gt;&gt;&gt; d__([c__(x) for x in [&#39;10&#39;, &#39;20&#39;]], allow=lambda data: data[&#39;allow_input_count__&#39;] == 2,</span>
+<span class="sd">        &gt;&gt;&gt; d__([c__(x) for x in [&#39;1&#39;, &#39;2&#39;]], allow=lambda data: data[&#39;allow_input_count__&#39;] == 2,</span>
 <span class="sd">                after=lambda data: call_after(data) if data[&#39;allow__&#39;] else &quot;&quot;)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -275,7 +307,8 @@
             <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]:</span>
-                        <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sep&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                        <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="o">+</span> \
+                            <span class="p">(</span><span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sep&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">):</span>
                 <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>

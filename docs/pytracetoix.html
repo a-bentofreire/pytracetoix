@@ -101,15 +101,18 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pytracetoix.c__">
 <span class="sig-prename descclassname"><span class="pre">pytracetoix.</span></span><span class="sig-name descname"><span class="pre">c__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytracetoix.html#c__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytracetoix.c__" title="Link to this definition"></a></dt>
-<dd><p>Captures the input value for the current thread.
-If no name is provided, it generates a default name.</p>
+<dd><p>Captures the input value for the current thread.</p>
+<p>If no name is provided, it generates a default name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>Any</em>) – The input value to store.</p></li>
-<li><p><strong>name</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Callable</em><em>[</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The name of the input. Defaults to ‘i%d’ where %d is the number of inputs for the thread.</p></li>
-<li><p><strong>allow</strong> (<em>Callable</em><em>[</em><em>[</em><em>int</em><em>, </em><em>str</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A function or value to allow tracing the input. <cite>allow</cite> is called before <cite>name</cite>.</p></li>
-<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The level number to be used when there is more than one <a href="#id1"><span class="problematic" id="id2">d__</span></a> within the same expression or function. Defaults to 0.</p></li>
+<li><p><strong>name</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Callable</em><em>[</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The name of the input.
+Defaults to ‘i%d’ where %d is the number of inputs for the thread.</p></li>
+<li><p><strong>allow</strong> (<em>Callable</em><em>[</em><em>[</em><em>int</em><em>, </em><em>str</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A function or value to allow tracing the input. <strong>allow</strong> is called before <strong>name</strong>.</p></li>
+<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The level number to be used when there is more than one <strong>d__</strong> within the same
+expression or function.
+Defaults to 0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -136,26 +139,33 @@ If no name is provided, it generates a default name.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pytracetoix.d__">
 <span class="sig-prename descclassname"><span class="pre">pytracetoix.</span></span><span class="sig-name descname"><span class="pre">d__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytracetoix.html#d__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytracetoix.d__" title="Link to this definition"></a></dt>
-<dd><p>Displays formatted result and inputs for the current thread using a given format.
-Optionally calls allow, before and after functions with the data.</p>
-<p><cite>allow</cite>, <cite>before</cite> and <cite>after</cite> will receive a parameter <cite>data</cite> with the allowed inputs plus the following <cite>meta</cite> values:</p>
+<dd><p>Displays formatted result and inputs for the current thread using a given format.</p>
+<p>Optionally calls <strong>allow</strong>, <strong>before</strong> and <strong>after</strong> functions with the data.</p>
+<dl class="simple">
+<dt><strong>allow</strong>, <strong>before</strong> and <strong>after</strong> will receive a parameter <strong>data</strong> with the allowed inputs.</dt><dd><p>With the following <strong>meta</strong> values:</p>
+</dd>
+</dl>
 <ul class="simple">
-<li><p><cite>meta__</cite>: list of meta keys including the name key.</p></li>
-<li><p><cite>thread_id__</cite>: thread_id being executed</p></li>
-<li><p><cite>allow_input_count__</cite>: total number of inputs that are allowed.</p></li>
-<li><p><cite>input_count__</cite>: total number of inputs being captured.</p></li>
-<li><p><cite>allow__</cite>: If false it was allowed. Use this for <cite>after</cite> callback.</p></li>
-<li><p><cite>output__</cite>: Text passed to <cite>before</cite> without <cite>new_line</cite>.</p></li>
-<li><p>name: name parameter</p></li>
+<li><p><strong>meta__</strong>: List of meta keys including the name key.</p></li>
+<li><p><strong>thread_id__</strong>: Id of the thread being executed.</p></li>
+<li><p><strong>allow_input_count__</strong>: Total number of inputs that are allowed.</p></li>
+<li><p><strong>input_count__</strong>: Total number of inputs being captured.</p></li>
+<li><p><strong>allow__</strong>: If <strong>false</strong> it was allowed. Use this for <strong>after</strong> callback.</p></li>
+<li><p><strong>output__</strong>: Text passed to <strong>before</strong> without <strong>new_line</strong>.</p></li>
+<li><p><strong>name</strong>: <strong>value</strong> parameter.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>Any</em>) – The result to trace.</p></li>
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the function being traced. Defaults to ‘_’).</p></li>
-<li><p><strong>allow</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em><em>, </em><em>optional</em>) – A function to call to allow tracing. If it returns False, tracing is skipped but after is still called.</p></li>
-<li><p><strong>before</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em><em>, </em><em>optional</em>) – A function to call before displaying the output. If it returns False, tracing is skipped.</p></li>
-<li><p><strong>after</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – A function to call after displaying the output. After is always called even if not allow.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the function being traced.
+Defaults to ‘_’.</p></li>
+<li><p><strong>allow</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em><em>, </em><em>optional</em>) – A function to call to allow tracing.
+If it returns False, tracing is skipped but after is still called.</p></li>
+<li><p><strong>before</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em><em>, </em><em>optional</em>) – A function to call before displaying the output.
+If it returns False, tracing is skipped.</p></li>
+<li><p><strong>after</strong> (<em>Callable</em><em>[</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – A function to call after displaying the output.
+After is always called even if not allow.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Dictionary of additional inputs.</p></li>
 <li><p><strong>format</strong> (<em>Format</em><em>, </em><em>optional</em>) – Alternative output format.</p></li>
 </ul>
@@ -181,7 +191,7 @@ Optionally calls allow, before and after functions with the data.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d__</span><span class="p">([</span><span class="n">c__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">]],</span> <span class="n">before</span><span class="o">=</span><span class="k">lambda</span> <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;10&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d__</span><span class="p">([</span><span class="n">c__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">]],</span> <span class="n">allow</span><span class="o">=</span><span class="k">lambda</span> <span class="n">data</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;allow_input_count__&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d__</span><span class="p">([</span><span class="n">c__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">]],</span> <span class="n">allow</span><span class="o">=</span><span class="k">lambda</span> <span class="n">data</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;allow_input_count__&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span>
 <span class="go">        after=lambda data: call_after(data) if data[&#39;allow__&#39;] else &quot;&quot;)</span>
 </pre></div>
 </div>
@@ -194,9 +204,12 @@ Optionally calls allow, before and after functions with the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stream</strong> (<em>stream</em><em>, </em><em>optional</em>) – The output stream to write the output lines. Defaults to sys.stdout.</p></li>
-<li><p><strong>multithreading</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it prefixes the output with <cite>thread_id:</cite>. Defaults to False.</p></li>
-<li><p><strong>format</strong> (<em>Format</em><em>, </em><em>optional</em>) – Format dictionary. Defaults to DEFAULT_FORMAT.</p></li>
+<li><p><strong>stream</strong> (<em>stream</em><em>, </em><em>optional</em>) – The output stream to write the output lines.
+Defaults to sys.stdout.</p></li>
+<li><p><strong>multithreading</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it prefixes the output with <cite>thread_id:</cite>.
+Defaults to False.</p></li>
+<li><p><strong>format</strong> (<em>Format</em><em>, </em><em>optional</em>) – Format dictionary.
+Defaults to DEFAULT_FORMAT.</p></li>
 </ul>
 </dd>
 </dl>
@@ -205,13 +218,16 @@ Optionally calls allow, before and after functions with the data.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pytracetoix.t__">
 <span class="sig-prename descclassname"><span class="pre">pytracetoix.</span></span><span class="sig-name descname"><span class="pre">t__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thread_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytracetoix.html#t__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytracetoix.t__" title="Link to this definition"></a></dt>
-<dd><p>Thread Name: Assigns a name to a thread. If no name is provided, generates a name based on the number of threads.
-If no thread_id is provided, uses the current thread ID.</p>
+<dd><p>Assigns a name to a thread.</p>
+<p>If no <strong>name</strong> is provided, it generates a name based on the number of threads.</p>
+<p>If no thread_id is provided, uses the current thread ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name for the thread. Defaults to ‘t%d’ where %d is the number of threads.</p></li>
-<li><p><strong>thread_id</strong> (<em>int</em><em>, </em><em>optional</em>) – The ID of the thread. Defaults to the current thread ID.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name for the thread.
+Defaults to ‘t%d’ where %d is the number of threads.</p></li>
+<li><p><strong>thread_id</strong> (<em>int</em><em>, </em><em>optional</em>) – The ID of the thread.
+Defaults to the current thread ID.</p></li>
 </ul>
 </dd>
 </dl>
