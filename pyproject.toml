@@ -1,6 +1,6 @@
 [project]
 name = "pytracetoix"
-version = "0.1.9"
+version = "1.0.0"
 authors = [
   { name="Alexandre Bento Freire", email="devtoix@a-bentofreire.com" },
 ]
@@ -12,10 +12,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords = ["debugging", "tracer", "debug", "log", "logger", "expression"]
+keywords = ["debugging", "tracer", "debug", "log", "logger", "expression", "lambda", "list comprehensions"]
 
 [project.urls]
 Homepage = "https://www.devtoix.com/en/projects/pytracetoix"
 Documentation = "https://www.devtoix.com/docs/pytracetoix/en/"
 Repository = "https://github.com/a-bentofreire/pytracetoix"
 Issues = "https://github.com/a-bentofreire/pytracetoix/issues"
+Twitter = "https://x.com/devtoix"

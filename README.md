@@ -1,5 +1,8 @@
 # Description
 
+![PyPI - Version](https://img.shields.io/pypi/v/pytracetoix)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/a-bentofreire/pytracetoix/.github%2Fworkflows%2Fpython-package.yml)
+
 [PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions.
 
 Code editors can't set breakpoints inside expressions, lambda functions, list comprehensions, and chained methods, forcing significant code changes to debug such code.
