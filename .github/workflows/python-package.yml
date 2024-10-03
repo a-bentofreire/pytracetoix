@@ -30,6 +30,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pytest-cov
 
+      - name: Set PYTHONPATH to include src directory
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
       - name: Run tests with coverage
         run: |
           pytest --cov=pytracetoix --cov-report=term-missing
