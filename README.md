@@ -207,7 +207,10 @@ for thread in threads:
 If you find this project useful, consider supporting it:
 
 - Donate:
+
 [![Donate via PayPal](https://www.paypalobjects.com/webstatic/en_US/i/btn/png/blue-rect-paypal-34px.png)](https://www.paypal.com/donate/?business=MCZDHYSK6TCKJ&no_recurring=0&item_name=Support+Open+Source&currency_code=EUR)
+
+[![Buy me a Coffee](https://www.devtoix.com/assets/buymeacoffee-small.png)](https://buymeacoffee.com/abentofreire)
 
 - Visit the project [homepage](https://www.devtoix.com/en/projects/pytracetoix)
 - Give the project a ⭐ on [Github](https://github.com/a-bentofreire/pytracetoix)
