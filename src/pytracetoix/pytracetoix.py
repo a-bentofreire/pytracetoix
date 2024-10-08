@@ -8,19 +8,22 @@ import sys
 from typing import Union, Callable, Dict, Any
 
 Format = Dict[str, Union[str, bool]]
+Allow_Result = Union[bool, Any]
 
 """
 Format Type -- Defines how result and input values will be formatted.
 
 Parameters:
-    result: The result value format will be displayed. Defaults to '{name}:`{value}`'.
-    input: The result value format will be displayed. Defaults to '{name}:`{value}`'.
+    result: The format of the result value to be displayed. Defaults to '{name}:`{value}`'.
+    input: The format of the input value to be displayed. Defaults to '{name}:`{value}`'.
+    thread: The format of the thread id format to be displayed. Defaults to '{id}: '.
     sep: The separator text between each input and the result. Defaults to ' | '.
     new_line: If True it will add a new line at the end of output.
 """
 DEFAULT_FORMAT: Format = {
     'result': '{name}:`{value}`',
     'input': '{name}:`{value}`',
+    'thread': '{id}: ',
     'sep': ' | ',
     'new_line': True
 }
@@ -79,7 +82,7 @@ def t__(name: str = None, thread_id: int = None):
 
 def c__(value: Any,
         name: Union[str, Callable[[int, int, Any], str]] = None,
-        allow: Union[bool, Callable[[int, str, Any], str]] = True,
+        allow: Union[bool, Callable[[int, str, Any], str], Allow_Result] = True,
         level: int = 0):
     """
     Captures the input value for the current thread.
@@ -93,6 +96,8 @@ def c__(value: Any,
           Defaults to 'i%d' where %d is the number of inputs for the thread.
         allow (Callable[[int, str, Any], str]], optional):
           A function or value to allow tracing the input. **allow** is called before **name**.
+          If it returns True or False, it will allow or disallow respectively.
+          If it returns not bool, then it will display the allow result instead of the input value.
         level (int, optional):
           The level number to be used when there is more than one **d__** within the same
           expression or function.
@@ -126,10 +131,14 @@ def c__(value: Any,
         if callable(name):
             name = name(index, len(inputs) - meta_count, value)
         name = name or f'i{len(inputs) - meta_count}'
+        display_value = value
         if callable(allow):
             allow = allow(index, name, value)
-        if allow:
-            _inputs_per_threads[thread_id][level][name] = value
+            if type(allow) is not bool:
+                display_value = allow
+                allow = True
+        if allow is None or allow:
+            _inputs_per_threads[thread_id][level][name] = display_value
         _inputs_per_threads[thread_id][level]['index__'] = index + 1
 
     return value
@@ -137,7 +146,7 @@ def c__(value: Any,
 
 def d__(value: Any,
         name: str = '_',
-        allow: Callable[[Dict[str, Any]], bool] = None,
+        allow: Callable[[Dict[str, Any]], Allow_Result] = None,
         before: Callable[[Dict[str, Any]], bool] = None,
         after: Callable[[Dict[str, Any]], None] = None,
         inputs: Dict[str, Any] = None,
@@ -166,6 +175,7 @@ def d__(value: Any,
         allow (Callable[[Dict[str, Any]], bool], optional):
           A function to call to allow tracing.
           If it returns False, tracing is skipped but after is still called.
+          If it returns not bool, then it will display the allow result instead of the result.
         before (Callable[[Dict[str, Any]], bool], optional):
           A function to call before displaying the output.
           If it returns False, tracing is skipped.
@@ -217,9 +227,17 @@ def d__(value: Any,
             data['meta__'].remove('index__')
         data['allow_input_count__'] = len(data) - len(data['meta__']) + 1
 
-        if allow is None or allow(data):
-            output = _thread_names.get(thread_id, str(thread_id)) + ': ' if _multithreading else ''
+        if allow is not None:
+            allow = allow(data)
+            if type(allow) is not bool:
+                data[name] = allow
+                allow = True
+
+        if allow is None or allow:
             format = format or _format
+            output = format['thread'] \
+                .replace('{id}', _thread_names.get(thread_id, str(thread_id))) \
+                if _multithreading and format.get('thread') else ''
             if format.get('input'):
                 for key, val in data.items():
                     if key not in data['meta__']:
@@ -227,7 +245,7 @@ def d__(value: Any,
                             (format.get('sep') or '')
 
             if format.get('result'):
-                output += replace_macro(format['result'], name, value)
+                output += replace_macro(format['result'], name, data[name])
             data['meta__'] += ['output__']
             data['output__'] = output
             if before is None or before(data):

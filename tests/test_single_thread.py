@@ -57,6 +57,10 @@ class TestSingleThread:
         d__([c__(i, allow=lambda _, __, value: value > 2 and value < 5) for i in range(10)],
             before=lambda data: self.call_equal(data, "i0:`3` | i1:`4` | _:`[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`"))
 
+    def test_capture_allow_value_override(self):
+        d__([c__(i, allow=lambda _, __, value: value[0]) for i in [('10', '20'), ('30', '40'), ('50', '60')]],
+            before=lambda data: self.call_equal(data, "i0:`10` | i1:`30` | i2:`50` | _:`[('10', '20'), ('30', '40'), ('50', '60')]`"))
+
     def test_capture_allow_index_with_name_index(self):
         d__([c__(i, allow=lambda index, _, __: index == 1 or index == 4, name=lambda index, _, __: f'x{index+1}') for i in range(6)],
             before=lambda data: self.call_equal(data, "x2:`1` | x5:`4` | _:`[0, 1, 2, 3, 4, 5]`"))
@@ -95,6 +99,11 @@ class TestSingleThread:
         d__([c__(i) for i in range(1)],
             allow=lambda data: data['thread_id__'] != threading.get_ident(),
             after=lambda data: data.get("output__") is None)
+
+    def test_display_allow_override(self):
+        d__([c__(i) for i in [('10', '20'), ('30', '40'), ('50', '60')]],
+            allow=lambda data: data['_'][0:2],
+            before=lambda data: self.call_equal(data, "i0:`('10', '20')` | i1:`('30', '40')` | i2:`('50', '60')` | _:`[('10', '20'), ('30', '40')]`"))
 
     def test_display_after(self):
         d__([c__(i) for i in range(2)],

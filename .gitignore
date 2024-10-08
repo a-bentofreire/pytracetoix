@@ -5,6 +5,6 @@ __pycache__/
 .coverage
 build/
 dist/
-pytracetoix.egg-info/
+src/PyTraceToIX.egg-info/
 pip-log.txt
 pip-delete-this-directory.txt

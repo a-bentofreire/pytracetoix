@@ -1,6 +1,6 @@
 [project]
-name = "pytracetoix"
-version = "1.0.0"
+name = "PyTraceToIX"
+version = "1.1.0"
 authors = [
   { name="Alexandre Bento Freire", email="devtoix@a-bentofreire.com" },
 ]
@@ -19,4 +19,5 @@ Homepage = "https://www.devtoix.com/en/projects/pytracetoix"
 Documentation = "https://www.devtoix.com/docs/pytracetoix/en/"
 Repository = "https://github.com/a-bentofreire/pytracetoix"
 Issues = "https://github.com/a-bentofreire/pytracetoix/issues"
+Changelog = "https://github.com/a-bentofreire/pytracetoix/blob/HEAD/CHANGELOG.md"
 Twitter = "https://x.com/devtoix"

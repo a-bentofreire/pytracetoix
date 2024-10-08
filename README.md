@@ -32,6 +32,7 @@ If you find this project useful, please, read the [Support this Project](https:/
 - Multiple levels.
 - Capture Input method with `allow` and `name` callback.
 - Display Result method with `allow`, `before` and `after` callbacks.
+- Input and Result output can be formatted and overridden.
 
 ## Installation
 
@@ -104,12 +105,22 @@ d__(c__(x) + c__(y), allow=lambda data: data['i0'] == 10.0)
 d__(c__(x, allow=lambda index, name, value: value > 10) + c__(y),
         allow=lambda data: data['allow_input_count__'] == 2)
 
-# Display expression if the generated output has the text 10
+# Display list comprehension if the generated output has the text 10
 d__([c__(x) for x in ['10', '20']], before=lambda data: '10' in data['output__'])
 
-# Display expression and after call `call_after` if it was allowed to display
+# Display list comprehension and after call `call_after` if it was allowed to display
 d__([c__(x) for x in ['10', '20']], allow=lambda data: data['allow_input_count__'] == 2,
         after=lambda data: call_after(data) if data['allow__'] else "")
+
+# Display list comprehension with allow input override
+d__([c__(x, allow=lambda index, name, value:value[0]) \
+    for x in [('10', '20'), ('30', '40'), ('50', '60')]])
+# i0:`10` | i1:`30` | i2:`50` | _:`[('10', '20'), ('30', '40'), ('50', '60')]`
+
+# Display list comprehension with allow result override
+d__([c__(x) for x in [('10', '20'), ('30', '40'), ('50', '60')]], \
+     allow=lambda data:data['_'][0:2])
+# i0:`('10', '20')` | i1:`('30', '40')` | i2:`('50', '60')` | _:`[('10', '20'), ('30', '40')]`
 
 class Chain:
     def __init__(self, data):
@@ -145,6 +156,7 @@ from pytracetoix import init__
 init__(format={
     'result': '{name}:`{value}`',
     'input': '{name}:`{value}`',
+    'thread': '{id}: ',
     'sep': ' | ',
     'new_line': True
 })
@@ -171,7 +183,7 @@ def thread_function():
 
 ## It displays the something: i0: `4` | _: `5`
 def thread_function_with_name():
-    t("something")
+    t__("something")
     d__(c__(4) + 1)
 
 threads = []

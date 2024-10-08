@@ -62,6 +62,23 @@ class TestInitResultFormat:
             before=lambda data: self.call_equal(data, "pp_:`ii[1, 2]`"))
 
 
+class TestInitThreadFormat:
+
+    @pytest.fixture(autouse=True)
+    def setup_and_teardown(self):
+        init__(multithreading=True, format={'result': 'uu{name}:`vv{value}`', 'thread': 'k{id}o'})
+        yield
+        init__()
+
+    def call_equal(self, data, expected):
+        assert data['output__'] == expected
+        return False
+
+    def test_display_format(self):
+        d__([c__(i + 3) for i in range(2)],
+            before=lambda data: self.call_equal(data, "k" + str(threading.get_ident()) + "ouu_:`vv[3, 4]`"))
+
+
 class TestInitStream:
 
     @pytest.fixture(autouse=True)
