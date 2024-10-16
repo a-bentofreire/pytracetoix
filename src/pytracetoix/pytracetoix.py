@@ -36,7 +36,10 @@ _lock = threading.Lock()
 _enabled = True
 
 
-def init__(stream: Any = None, multithreading: bool = False, format: Format = DEFAULT_FORMAT, enabled = True):
+def init__(stream: Any = None,
+           multithreading: bool = False,
+           format: Format = DEFAULT_FORMAT,
+           enabled=True):
     """
     Initializes global settings of the tracing tool.
 
@@ -50,7 +53,7 @@ def init__(stream: Any = None, multithreading: bool = False, format: Format = DE
         format (Format, optional):
           Format dictionary.
           Defaults to DEFAULT_FORMAT.
-        enabled (bool) 
+        enabled (bool)
           If `False`, it disables `t__`, `c__` and `d__`.
           Defaults to `true`.
     """
@@ -259,7 +262,8 @@ def d__(value: Any,
                 data['meta__'] += ['output__']
                 data['output__'] = output
                 if before is None or before(data):
-                    _stream.write(data['output__'] + ('\n' if format.get('new_line') or True else ''))
+                    _stream.write(data['output__']
+                                  + ('\n' if format.get('new_line') or True else ''))
                     _stream.flush()
             else:
                 data['allow__'] = False
