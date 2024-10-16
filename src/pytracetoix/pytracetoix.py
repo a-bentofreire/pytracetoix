@@ -18,7 +18,7 @@ Parameters:
     input: The format of the input value to be displayed. Defaults to '{name}:`{value}`'.
     thread: The format of the thread id format to be displayed. Defaults to '{id}: '.
     sep: The separator text between each input and the result. Defaults to ' | '.
-    new_line: If True it will add a new line at the end of output.
+    new_line: If `True` it will add a new line at the end of output.
 """
 DEFAULT_FORMAT: Format = {
     'result': '{name}:`{value}`',
@@ -33,9 +33,10 @@ _format = DEFAULT_FORMAT
 _inputs_per_threads = {}
 _thread_names = {}
 _lock = threading.Lock()
+_enabled = True
 
 
-def init__(stream: Any = None, multithreading: bool = False, format: Format = DEFAULT_FORMAT):
+def init__(stream: Any = None, multithreading: bool = False, format: Format = DEFAULT_FORMAT, enabled = True):
     """
     Initializes global settings of the tracing tool.
 
@@ -49,14 +50,18 @@ def init__(stream: Any = None, multithreading: bool = False, format: Format = DE
         format (Format, optional):
           Format dictionary.
           Defaults to DEFAULT_FORMAT.
+        enabled (bool) 
+          If `False`, it disables `t__`, `c__` and `d__`.
+          Defaults to `true`.
     """
-    global _stream, _multithreading, _format, _inputs_per_threads, _thread_names
+    global _stream, _multithreading, _format, _inputs_per_threads, _thread_names, _enabled
     with _lock:
         _stream = stream or sys.stdout
         _multithreading = multithreading
         _format = format
         _inputs_per_threads = {}
         _thread_names = {}
+        _enabled = enabled
 
 
 def t__(name: str = None, thread_id: int = None):
@@ -119,6 +124,8 @@ def c__(value: Any,
 
     """
     global _inputs_per_threads
+    if not _enabled:
+        return value
     with _lock:
         thread_id = threading.get_ident()
         if thread_id not in _inputs_per_threads:
@@ -208,6 +215,8 @@ def d__(value: Any,
 
 """
     global _inputs_per_threads, _thread_names, _stream, _multithreading, _format
+    if not _enabled:
+        return value
 
     def replace_macro(format, key, value):
         return format.replace('{name}', key).replace('{value}', str(value))
@@ -227,39 +236,40 @@ def d__(value: Any,
             data['meta__'].remove('index__')
         data['allow_input_count__'] = len(data) - len(data['meta__']) + 1
 
-        if allow is not None:
-            allow = allow(data)
-            if type(allow) is not bool:
-                data[name] = allow
-                allow = True
+        try:
+            if allow is not None:
+                allow = allow(data)
+                if type(allow) is not bool:
+                    data[name] = allow
+                    allow = True
 
-        if allow is None or allow:
-            format = format or _format
-            output = format['thread'] \
-                .replace('{id}', _thread_names.get(thread_id, str(thread_id))) \
-                if _multithreading and format.get('thread') else ''
-            if format.get('input'):
-                for key, val in data.items():
-                    if key not in data['meta__']:
-                        output += replace_macro(format['input'], key, val) + \
-                            (format.get('sep') or '')
+            if allow is None or allow:
+                format = format or _format
+                output = format['thread'] \
+                    .replace('{id}', _thread_names.get(thread_id, str(thread_id))) \
+                    if _multithreading and format.get('thread') else ''
+                if format.get('input'):
+                    for key, val in data.items():
+                        if key not in data['meta__']:
+                            output += replace_macro(format['input'], key, val) + \
+                                (format.get('sep') or '')
 
-            if format.get('result'):
-                output += replace_macro(format['result'], name, data[name])
-            data['meta__'] += ['output__']
-            data['output__'] = output
-            if before is None or before(data):
-                _stream.write(data['output__'] + ('\n' if format.get('new_line') or True else ''))
-                _stream.flush()
-        else:
-            data['allow__'] = False
+                if format.get('result'):
+                    output += replace_macro(format['result'], name, data[name])
+                data['meta__'] += ['output__']
+                data['output__'] = output
+                if before is None or before(data):
+                    _stream.write(data['output__'] + ('\n' if format.get('new_line') or True else ''))
+                    _stream.flush()
+            else:
+                data['allow__'] = False
 
-        if after is not None:
-            after(data)
-
-        if _inputs_per_threads.get(thread_id):
-            _inputs_per_threads[thread_id].pop()
-            if len(_inputs_per_threads[thread_id]) == 0:
-                _inputs_per_threads.pop(thread_id, None)
+            if after is not None:
+                after(data)
+        finally:
+            if _inputs_per_threads.get(thread_id):
+                _inputs_per_threads[thread_id].pop()
+                if len(_inputs_per_threads[thread_id]) == 0:
+                    _inputs_per_threads.pop(thread_id, None)
 
     return value

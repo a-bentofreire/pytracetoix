@@ -18,7 +18,7 @@ class TestSingleThread:
     def test_lambda_no_inputs(self):
         (lambda o: d__(o + 1, before=lambda data: self.call_equal(data, "_:`16`")))(15)
 
-    def test_lambda_string(self):
+    def test_lambda_with_inputs(self):
         (lambda o: d__(c__(o) + c__(o + 1), before=lambda data: self.call_equal(data, "i0:`5` | i1:`6` | _:`11`")))(5)
 
     def test_lambda_array(self):

@@ -3,9 +3,9 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/pytracetoix)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/a-bentofreire/pytracetoix/.github%2Fworkflows%2Fpython-package.yml)
 
-[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions.
+[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions in general.
 
-Code editors can't set breakpoints inside expressions, lambda functions, list comprehensions, and chained methods, forcing significant code changes to debug such code.
+Code editors can't set breakpoints within such expressions, requiring significant code changes to debug.
 
 PyTraceToIX provides a straightforward solution to this problem.
 
@@ -23,16 +23,23 @@ If you find this project useful, please, read the [Support this Project](https:/
 
 ## Features
 
-- [Multithreading](https://www.devtoix.com/en/projects/pytracetoix#multithreading) support.
-- Simple and short minimalist function names.
-- Result with Inputs tracing.
+- No external dependencies.
+- Minimalist function names that are simple and short.
+- Traces Results along with Inputs.
+- Configurable Result and Input naming.
+- Output to the `stdout` or a stream.
+- Supports multiple levels.
+- Capture Input method with customizable `allow` and `name` callbacks.
+- Display Result method with customizable `allow`, `before`, and `after` callbacks.
+- Result and Inputs can be reformatted and overridden.
 - Configurable [formatting](https://www.devtoix.com/en/projects/pytracetoix#formatting) at global level and at function level.
-- Configurable result and input naming.
-- Output to the stdout or a stream.
-- Multiple levels.
-- Capture Input method with `allow` and `name` callback.
-- Display Result method with `allow`, `before` and `after` callbacks.
-- Input and Result output can be formatted and overridden.
+- [Multithreading](https://www.devtoix.com/en/projects/pytracetoix#multithreading) support.
+
+## JavaScript Version
+
+This package is also available in JavaScript for similar debugging purposes. The JavaScript version, called **JsTraceToIX**, allows tracing input and output values during debugging and can be found on [JsTraceToIX](https://www.devtoix.com/en/projects/jstracetoix).
+
+It offers the same `c__` and `d__` tracing functionality for JavaScript, supporting React, Vue, browser and Node.js environments.
 
 ## Installation
 
@@ -86,27 +93,32 @@ f(5, 6)
 # Output:
 # x:`5` | y+1:`7` | f:`12`
 
-#  list comprehension
+# list comprehension
 l = [5 * y * x for x, y in [(10, 20), (30, 40)]]
 
 # Display list comprehension with input and result names
 l = d__([5 * c__(y, name=f"y{y}") * c__(x, name=lambda index, _, __: f'v{index}') for x, y in [(10, 20), (30, 40)]])
-
 # Output:
 # y20:`20` | v1:`10` | y40:`40` | v3:`30` | _:`[1000, 6000]`
 
 # Display expression if `input count` is 2
 d__(c__(x) + c__(y), allow=lambda data: data['input_count__'] == 2)
+# Output:
+# i0:`1` | i1:`2` | _:`3`
 
 # Display expression if the first input value is 10.0
 d__(c__(x) + c__(y), allow=lambda data: data['i0'] == 10.0)
+# No output
 
 # Display expression if the `allow_input_count` is 2, in this case if `x > 10`
 d__(c__(x, allow=lambda index, name, value: value > 10) + c__(y),
         allow=lambda data: data['allow_input_count__'] == 2)
+# No output
 
 # Display list comprehension if the generated output has the text 10
 d__([c__(x) for x in ['10', '20']], before=lambda data: '10' in data['output__'])
+# Output:
+# i0:`10` | i1:`20` | _:`['10', '20']`
 
 # Display list comprehension and after call `call_after` if it was allowed to display
 d__([c__(x) for x in ['10', '20']], allow=lambda data: data['allow_input_count__'] == 2,
@@ -164,9 +176,9 @@ init__(format={
 
 Formatting parameters:
 - `result`: The result value format will be displayed.
-- `input`: The result value format will be displayed.
+- `input`: The input value format will be displayed.
 - `sep`: The separator text between each input and the result.
-- `new_line`: If True it will add a new line at the end of output.
+- `new_line`: If `True` it will add a new line at the end of output.
 
 ## Multithreading
 
@@ -200,7 +212,7 @@ for thread in threads:
 
 ## Metadata
 
- The `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` items:
+The `d__` function callbacks `allow`, `before` and `after` will receive a parameter `data` with the allowed inputs plus the following `meta` items:
 
 - `meta__`: list of meta keys including the name key.
 - `thread_id__`: thread_id being executed

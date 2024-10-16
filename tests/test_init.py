@@ -115,5 +115,24 @@ class TestInitMultiThread:
             before=lambda data: self.call_equal(data, str(threading.get_ident()) + ": i0:`2` | i1:`3` | _:`[2, 3]`"))
 
 
+class TestInitEnabled:
+
+    @pytest.fixture(autouse=True)
+    def setup_and_teardown(self, tmpdir):
+        tmp_filename = tmpdir.join("unit-test-file-enabled.txt")
+        self.stream = open(tmp_filename, "w")
+        init__(stream=self.stream, enabled=False)
+        yield
+        self.stream.close()
+        with open(tmp_filename, "r") as f:
+            content = f.read()
+        os.remove(tmp_filename)
+        assert content == ""
+        init__()
+
+    def test_display_format(self):
+        d__([c__(i + 2) for i in range(2)])
+
+
 if __name__ == '__main__':
     pytest.main()
