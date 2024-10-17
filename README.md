@@ -3,11 +3,15 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/pytracetoix)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/a-bentofreire/pytracetoix/.github%2Fworkflows%2Fpython-package.yml)
 
-[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer for debugging lambdas, list comprehensions, method chaining, and expressions in general.
+[PyTraceToIX](https://www.devtoix.com/en/projects/pytracetoix) is an expression tracer designed for debugging Jinja2 templates, Flask web apps, lambdas, list comprehensions, method chaining, and expressions in general.
 
-Code editors can't set breakpoints within such expressions, requiring significant code changes to debug.
+Code editors often cannot set breakpoints within these kinds of expressions, which requires significant code modifications to debug effectively.
 
-PyTraceToIX provides a straightforward solution to this problem.
+For Jinja2 templates, the debug extension can be used, but it typically dumps the entire context, making it difficult to isolate specific issues. PyTraceToIX solves this by allowing developers to trace and write specific data directly to sys.stdout or a stream without altering the design or making any changes to the web application.
+
+Additionally, PyTraceToIX can capture multiple inputs and their results, displaying them all in a single line, making it easier to view aggregated data and trace the flow of values.
+
+PyTraceToIX offers a straightforward solution to these challenges, simplifying debugging while preserving the integrity of the original codebase.
 
 It was designed to be simple, with easily identifiable functions that can be removed once the bug is found.
 
@@ -47,7 +51,111 @@ It offers the same `c__` and `d__` tracing functionality for JavaScript, support
 pip install pytracetoix
 ```
 
-## Usage
+## Jinja2 templates Usage
+
+In this example:
+- A flask web app uses a Jinja2 template
+- It generates a shopping card html table with product, quantity and final price
+
+| Product | Qty | Final Price |
+| ------- | --- | ----------- |
+| Smartphone | 5 | 2500 |
+| Wireless B | 50 | 49960 |
+| Smartphone | 20 | 1990 |
+
+- The product name is only the first 11 characters, but we need to know the full name.
+- It only shows the final price which is Price * Qty - discount.
+- The discount is dependent of the quantity.
+- `c__` captures the complete name but doesn't change the design.
+- `c__` captures the qty and labels it as Qty.
+- `c__` captures the discount value.
+- `d__` outputs to sys.stdout all the captured inputs and the final price.
+
+The stdout will display these lines:
+
+```plaintext
+i0:`Smartphone 128GB` | qty:`5` | i2:`500` | discount:`0` | _:`2500`
+i0:`Wireless Bluetooth Headphones` | qty:`50` | i2:`1000` | discount:`40` | _:`49960`
+i0:`Smartphone 64GB Black` | qty:`20` | i2:`100` | discount:`10` | _:`1990`
+```
+
+Jinja2 template:
+
+```html
+<html lang="en">
+<head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body>
+    <div class="container mt-5">
+        <h1>Shopping Cart</h1>
+        <table class="table table-striped">
+            <tr><th>Product</th><th>Qty</th><th>Final Price</th></tr>
+            {% for item in purchases %}
+            {% set product = products[item['product']] %}
+            <tr>
+                <td>{{ c__(product['name'])[0:10] }}</td>
+                <td>{{ c__(item['qty'], name='qty') }}</td>
+                <td>{{ d__(c__(product['price']) * item['qty']
+                    - c__(discount(item['qty']), name='discount')) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
+```
+
+app.py:
+
+```python
+from flask import Flask, render_template
+from pytracetoix import c__, d__
+
+app = Flask(__name__)
+
+app.Jinja2_env.globals['d__'] = d__
+app.Jinja2_env.globals['c__'] = c__
+
+DISCOUNTS = {50: 40, 20: 10, 10: 5, 0: 0}
+PRODUCTS = {
+    'WB50CC': {'name': 'Wireless Bluetooth Headphones', 'price': 1000},
+    'PH20XX': {'name': 'Smartphone 128GB', 'price': 500},
+    'PH50YY': {'name': 'Smartphone 64GB Black', 'price': 100}
+}
+
+PURCHASES = [
+    {'product': 'PH20XX', 'qty': 5},
+    {'product': 'WB50CC', 'qty': 50},
+    {'product': 'PH50YY', 'qty': 20}
+]
+
+
+def discount(qty): return next((k, v) for k, v in DISCOUNTS.items() if k <= qty)[1]
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html', products=PRODUCTS, purchases=PURCHASES, discount=discount)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+If the previous example, we add c__ to the discount function on app.py:
+
+```python
+def discount(qty): return c__(next((k, v) for k, v in DISCOUNTS.items() if k <= qty))[1]
+```
+
+It will add richer discount information to the output:
+
+```plaintext
+i0:`Smartphone 128GB` | qty:`5` | i2:`500` | i3:`(0, 0)` | discount:`0` | _:`2500`
+i0:`Wireless Bluetooth Headphones` | qty:`50` | i2:`1000` | i3:`(50, 40)` | discount:`40` | _:`49960`
+i0:`Smartphone 64GB Black` | qty:`20` | i2:`100` | i3:`(20, 10)` | discount:`10` | _:`1990`
+```
+
+## Detailed Usage and Examples
 
 ```python
 from pytracetoix import d__, c__

@@ -1,6 +1,6 @@
 [project]
 name = "PyTraceToIX"
-version = "1.2.0"
+version = "1.2.1"
 authors = [
   { name="Alexandre Bento Freire", email="devtoix@a-bentofreire.com" },
 ]

@@ -1,3 +1,7 @@
+## v1.2.1 - 2024-10-17
+- Improve README
+- Add Jinja2 and flask examples
+
 ## v1.2.0 - 2024-10-16
 - Add `init__(enabled)` for global disable all capture and output.
 

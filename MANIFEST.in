@@ -1,4 +1,5 @@
 exclude tests/*.py
+exclude examples/**
 include README.md
 include LICENSE
 include src/pytracetoix/pytracetoix.py

@@ -91,7 +91,7 @@
 <span class="sd">    input: The format of the input value to be displayed. Defaults to &#39;{name}:`{value}`&#39;.</span>
 <span class="sd">    thread: The format of the thread id format to be displayed. Defaults to &#39;{id}: &#39;.</span>
 <span class="sd">    sep: The separator text between each input and the result. Defaults to &#39; | &#39;.</span>
-<span class="sd">    new_line: If True it will add a new line at the end of output.</span>
+<span class="sd">    new_line: If `True` it will add a new line at the end of output.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">DEFAULT_FORMAT</span><span class="p">:</span> <span class="n">Format</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;result&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">:`</span><span class="si">{value}</span><span class="s1">`&#39;</span><span class="p">,</span>
@@ -106,11 +106,15 @@
 <span class="n">_inputs_per_threads</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">_thread_names</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">_enabled</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="init__">
 <a class="viewcode-back" href="../pytracetoix.html#pytracetoix.init__">[docs]</a>
-<span class="k">def</span> <span class="nf">init__</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">multithreading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Format</span> <span class="o">=</span> <span class="n">DEFAULT_FORMAT</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">init__</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+           <span class="n">multithreading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+           <span class="nb">format</span><span class="p">:</span> <span class="n">Format</span> <span class="o">=</span> <span class="n">DEFAULT_FORMAT</span><span class="p">,</span>
+           <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes global settings of the tracing tool.</span>
 
@@ -124,14 +128,18 @@
 <span class="sd">        format (Format, optional):</span>
 <span class="sd">          Format dictionary.</span>
 <span class="sd">          Defaults to DEFAULT_FORMAT.</span>
+<span class="sd">        enabled (bool)</span>
+<span class="sd">          If `False`, it disables `t__`, `c__` and `d__`.</span>
+<span class="sd">          Defaults to `true`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">_stream</span><span class="p">,</span> <span class="n">_multithreading</span><span class="p">,</span> <span class="n">_format</span><span class="p">,</span> <span class="n">_inputs_per_threads</span><span class="p">,</span> <span class="n">_thread_names</span>
+    <span class="k">global</span> <span class="n">_stream</span><span class="p">,</span> <span class="n">_multithreading</span><span class="p">,</span> <span class="n">_format</span><span class="p">,</span> <span class="n">_inputs_per_threads</span><span class="p">,</span> <span class="n">_thread_names</span><span class="p">,</span> <span class="n">_enabled</span>
     <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
         <span class="n">_stream</span> <span class="o">=</span> <span class="n">stream</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
         <span class="n">_multithreading</span> <span class="o">=</span> <span class="n">multithreading</span>
         <span class="n">_format</span> <span class="o">=</span> <span class="nb">format</span>
         <span class="n">_inputs_per_threads</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">_thread_names</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="n">_thread_names</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_enabled</span> <span class="o">=</span> <span class="n">enabled</span></div>
 
 
 
@@ -200,6 +208,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_inputs_per_threads</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_enabled</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
     <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
         <span class="n">thread_id</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">get_ident</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">thread_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_inputs_per_threads</span><span class="p">:</span>
@@ -292,6 +302,8 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_inputs_per_threads</span><span class="p">,</span> <span class="n">_thread_names</span><span class="p">,</span> <span class="n">_stream</span><span class="p">,</span> <span class="n">_multithreading</span><span class="p">,</span> <span class="n">_format</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_enabled</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">format</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{value}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
@@ -311,40 +323,42 @@
             <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;index__&#39;</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;allow_input_count__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">allow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">allow</span> <span class="o">=</span> <span class="n">allow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">allow</span>
-                <span class="n">allow</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">allow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">allow</span> <span class="o">=</span> <span class="n">allow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">allow</span>
+                    <span class="n">allow</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">allow</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">allow</span><span class="p">:</span>
-            <span class="nb">format</span> <span class="o">=</span> <span class="nb">format</span> <span class="ow">or</span> <span class="n">_format</span>
-            <span class="n">output</span> <span class="o">=</span> <span class="nb">format</span><span class="p">[</span><span class="s1">&#39;thread&#39;</span><span class="p">]</span> \
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_thread_names</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">thread_id</span><span class="p">)))</span> \
-                <span class="k">if</span> <span class="n">_multithreading</span> <span class="ow">and</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;thread&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]:</span>
-                        <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="o">+</span> \
-                            <span class="p">(</span><span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sep&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">allow</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">allow</span><span class="p">:</span>
+                <span class="nb">format</span> <span class="o">=</span> <span class="nb">format</span> <span class="ow">or</span> <span class="n">_format</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="nb">format</span><span class="p">[</span><span class="s1">&#39;thread&#39;</span><span class="p">]</span> \
+                    <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_thread_names</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">thread_id</span><span class="p">)))</span> \
+                    <span class="k">if</span> <span class="n">_multithreading</span> <span class="ow">and</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;thread&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]:</span>
+                            <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="o">+</span> \
+                                <span class="p">(</span><span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sep&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">):</span>
-                <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
-            <span class="k">if</span> <span class="n">before</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">before</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                <span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new_line&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-                <span class="n">_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;allow__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">):</span>
+                    <span class="n">output</span> <span class="o">+=</span> <span class="n">replace_macro</span><span class="p">(</span><span class="nb">format</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta__&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
+                <span class="k">if</span> <span class="n">before</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">before</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                    <span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;output__&#39;</span><span class="p">]</span>
+                                  <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="nb">format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new_line&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+                    <span class="n">_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;allow__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="n">after</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">after</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">_inputs_per_threads</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">thread_id</span><span class="p">):</span>
-            <span class="n">_inputs_per_threads</span><span class="p">[</span><span class="n">thread_id</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_inputs_per_threads</span><span class="p">[</span><span class="n">thread_id</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">_inputs_per_threads</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">thread_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">after</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">after</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_inputs_per_threads</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">thread_id</span><span class="p">):</span>
+                <span class="n">_inputs_per_threads</span><span class="p">[</span><span class="n">thread_id</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_inputs_per_threads</span><span class="p">[</span><span class="n">thread_id</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">_inputs_per_threads</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">thread_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">value</span></div>
 
